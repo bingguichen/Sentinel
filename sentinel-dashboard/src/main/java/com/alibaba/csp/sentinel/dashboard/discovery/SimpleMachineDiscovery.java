@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 import com.alibaba.csp.sentinel.util.AssertUtil;
 
@@ -61,6 +62,19 @@ public class SimpleMachineDiscovery implements MachineDiscovery {
     public AppInfo getDetailApp(String app) {
         AssertUtil.assertNotBlank(app, "app name cannot be blank");
         return apps.get(app);
+    }
+
+    @Override
+    public MachineInfo getFirstMachine(String app) {
+        AssertUtil.assertNotBlank(app, "app name cannot be blank");
+        MachineInfo machineInfo = new MachineInfo();
+        Set<MachineInfo> machines = apps.get(app).getMachines();
+        if(!machines.isEmpty()){
+            machineInfo = machines.stream()
+                    .filter(MachineInfo::isHealthy)
+                    .sorted((e1, e2) -> Long.compare(e2.getLastHeartbeat(), e1.getLastHeartbeat())).collect(Collectors.toList()).get(0);
+        }
+        return machineInfo;
     }
 
     @Override

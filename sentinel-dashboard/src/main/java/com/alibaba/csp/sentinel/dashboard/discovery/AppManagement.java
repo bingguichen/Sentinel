@@ -64,7 +64,12 @@ public class AppManagement implements MachineDiscovery {
     public AppInfo getDetailApp(String app) {
         return machineDiscovery.getDetailApp(app);
     }
-    
+
+    @Override
+    public MachineInfo getFirstMachine(String app) {
+        return machineDiscovery.getFirstMachine(app);
+    }
+
     @Override
     public void removeApp(String app) {
         machineDiscovery.removeApp(app);

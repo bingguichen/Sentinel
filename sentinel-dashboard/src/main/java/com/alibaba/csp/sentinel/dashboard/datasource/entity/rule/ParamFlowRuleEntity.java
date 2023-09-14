@@ -29,6 +29,7 @@ import java.util.List;
  * @since 0.2.1
  */
 public class ParamFlowRuleEntity extends AbstractRuleEntity<ParamFlowRule> {
+    public static String PARAM_FLOW_RULE_PREFIX = "param_flow";
 
     public ParamFlowRuleEntity() {
     }

@@ -27,7 +27,7 @@ public interface MachineDiscovery {
     Set<AppInfo> getBriefApps();
 
     AppInfo getDetailApp(String app);
-
+    MachineInfo getFirstMachine(String app);
     /**
      * Remove the given app from the application registry.
      *

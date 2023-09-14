@@ -30,20 +30,20 @@ public class MetricEntity {
      */
     private Date timestamp;
     private String resource;
-    private Long passQps;
-    private Long successQps;
-    private Long blockQps;
-    private Long exceptionQps;
+    private Long passQps=0L;
+    private Long successQps=0L;
+    private Long blockQps=0L;
+    private Long exceptionQps=0L;
 
     /**
      * summary rt of all success exit qps.
      */
-    private double rt;
+    private double rt=0.0;
 
     /**
      * 本次聚合的总条数
      */
-    private int count;
+    private int count=0;
 
     private int resourceCode;
 

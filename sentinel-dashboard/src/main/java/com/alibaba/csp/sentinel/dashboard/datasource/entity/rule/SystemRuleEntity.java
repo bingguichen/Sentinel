@@ -23,6 +23,7 @@ import java.util.Date;
  * @author leyou
  */
 public class SystemRuleEntity implements RuleEntity {
+    public static String SYSTEM_RULE_PREFIX = "system";
 
     private Long id;
 
@@ -148,11 +149,21 @@ public class SystemRuleEntity implements RuleEntity {
     @Override
     public SystemRule toRule() {
         SystemRule rule = new SystemRule();
-        rule.setHighestSystemLoad(highestSystemLoad);
-        rule.setAvgRt(avgRt);
-        rule.setMaxThread(maxThread);
-        rule.setQps(qps);
-        rule.setHighestCpuUsage(highestCpuUsage);
+        if (this.highestSystemLoad != null) {
+            rule.setHighestSystemLoad(highestSystemLoad);
+        }
+        if (this.avgRt != null) {
+            rule.setAvgRt(avgRt);
+        }
+        if (this.maxThread != null) {
+            rule.setMaxThread(maxThread);
+        }
+        if (this.qps != null) {
+            rule.setQps(qps);
+        }
+        if (this.highestCpuUsage != null) {
+            rule.setHighestCpuUsage(highestCpuUsage);
+        }
         return rule;
     }
 }

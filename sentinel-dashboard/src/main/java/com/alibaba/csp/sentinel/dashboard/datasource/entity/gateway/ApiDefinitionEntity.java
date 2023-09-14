@@ -33,6 +33,7 @@ import java.util.Set;
  * @since 1.7.0
  */
 public class ApiDefinitionEntity implements RuleEntity {
+    public static String GATEWAY_API_PREFIX = "gateway_api";
 
     private Long id;
     private String app;

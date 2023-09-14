@@ -19,6 +19,7 @@ import com.alibaba.csp.sentinel.dashboard.datasource.entity.MetricEntity;
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.csp.sentinel.util.TimeUtil;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
  * @author Carpenter Lee
  * @author Eric Zhao
  */
-@Component
+@Repository("inMemoryMetricsRepository")
 public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity> {
 
     private static final long MAX_METRIC_LIVE_TIME_MS = 1000 * 60 * 5;
@@ -112,7 +113,7 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
     }
 
     @Override
-    public List<String> listResourcesOfApp(String app) {
+    public List<String> listResourcesOfApp(String app, String period) {
         List<String> results = new ArrayList<>();
         if (StringUtil.isBlank(app)) {
             return results;

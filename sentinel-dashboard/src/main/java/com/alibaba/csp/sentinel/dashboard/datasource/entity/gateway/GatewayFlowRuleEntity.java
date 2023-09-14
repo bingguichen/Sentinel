@@ -30,6 +30,7 @@ import java.util.Objects;
  * @since 1.7.0
  */
 public class GatewayFlowRuleEntity implements RuleEntity {
+    public static String GATEWAY_FLOW_RULE_PREFIX = "gateway_flow";
 
     /**间隔单位*/
     /**0-秒*/

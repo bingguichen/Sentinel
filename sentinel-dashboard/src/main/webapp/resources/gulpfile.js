@@ -23,7 +23,7 @@ const JS_LIBS = [
   'node_modules/ng-dialog/js/ngDialog.js',
   'node_modules/angular-ui-notification/dist/angular-ui-notification.min.js',
   'node_modules/angular-utils-pagination/dirPagination.js',
-  'app/scripts/libs/treeTable.js',
+  'app/scripts/libs/treeTable.js'
 ];
 
 const CSS_APP = [
@@ -46,18 +46,24 @@ const JS_APP = [
   'app/scripts/services/version_service.js',
   'app/scripts/services/auth_service.js',
   'app/scripts/services/appservice.js',
-  'app/scripts/services/flow_service_v1.js',
-  'app/scripts/services/flow_service_v2.js',
-  'app/scripts/services/degrade_service.js',
-  'app/scripts/services/systemservice.js',
   'app/scripts/services/machineservice.js',
-  'app/scripts/services/identityservice.js',
   'app/scripts/services/metricservice.js',
-  'app/scripts/services/param_flow_service.js',
-  'app/scripts/services/authority_service.js',
+  'app/scripts/services/identityservice.js',
   'app/scripts/services/cluster_state_service.js',
-  'app/scripts/services/gateway/api_service.js',
-  'app/scripts/services/gateway/flow_service.js',
+  'app/scripts/services/v1/rule/flow_service.js',
+  'app/scripts/services/v1/rule/degrade_service.js',
+  'app/scripts/services/v1/rule/systemservice.js',
+  'app/scripts/services/v1/rule/param_flow_service.js',
+  'app/scripts/services/v1/rule/authority_service.js',
+  'app/scripts/services/v1/gateway/api_service.js',
+  'app/scripts/services/v1/gateway/flow_service.js',
+  'app/scripts/services/v2/rule/flow_service.js',
+  'app/scripts/services/v2/rule/degrade_service.js',
+  'app/scripts/services/v2/rule/systemservice.js',
+  'app/scripts/services/v2/rule/param_flow_service.js',
+  'app/scripts/services/v2/rule/authority_service.js',
+  'app/scripts/services/v2/gateway/api_service.js',
+  'app/scripts/services/v2/gateway/flow_service.js'
 ];
 
 gulp.task('lib', function () {
@@ -123,7 +129,7 @@ gulp.task('serve', ['build'], function () {
   });
   // 打开浏览器
   setTimeout(() => {
-    open('http://localhost:8080/index_dev.htm')
+    open('http://localhost:8080/index.htm')
   }, 200);
   // 监听
   gulp.watch(app.srcPath + '**/*.js', ['js']);

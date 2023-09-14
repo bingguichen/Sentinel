@@ -24,6 +24,7 @@ import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
  * @author leyou
  */
 public class FlowRuleEntity implements RuleEntity {
+    public static String FLOW_RULE_PREFIX = "flow";
 
     private Long id;
     private String app;
