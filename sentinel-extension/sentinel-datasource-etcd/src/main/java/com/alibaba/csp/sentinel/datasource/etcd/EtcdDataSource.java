@@ -69,6 +69,31 @@ public class EtcdDataSource<T> extends AbstractDataSource<String, T> {
         initWatcher();
     }
 
+    /**
+     * Create an etcd data-source. The connection configuration will be retrieved from {@link EtcdConfig}.
+     *
+     * @param connectionConfig Etcd connection config
+     * @param key    config key
+     * @param parser data parser
+     */
+    public EtcdDataSource(EtcdConnectionConfig connectionConfig, String key, Converter<String, T> parser) {
+        super(parser);
+        if (!connectionConfig.isAuthEnable()) {
+            this.client = Client.builder()
+                    .endpoints(connectionConfig.getEndPoints().split(",")).build();
+        } else {
+            this.client = Client.builder()
+                    .endpoints(connectionConfig.getEndPoints().split(","))
+                    .user(ByteSequence.from(connectionConfig.getUser(), charset))
+                    .password(ByteSequence.from(connectionConfig.getPassword(), charset))
+                    .authority(connectionConfig.getAuthority())
+                    .build();
+        }
+        this.key = key;
+        loadInitialConfig();
+        initWatcher();
+    }
+
     private void loadInitialConfig() {
         try {
             T newValue = loadConfig();

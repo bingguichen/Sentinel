@@ -140,6 +140,41 @@
             <artifactId>influxdb-client-java</artifactId>
             <version>6.10.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-datasource-etcd</artifactId>
+            <version>1.8.6</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.etcd</groupId>
+                    <artifactId>jetcd-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>io.etcd</groupId>
+            <artifactId>jetcd-core</artifactId>
+            <version>0.5.0</version><exclusions>
+            <exclusion>
+                <groupId>com.google.android</groupId>
+                <artifactId>annotations</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error_prone_annotations</artifactId>
+            </exclusion>
+        </exclusions>
+        </dependency>
     </dependencies>
 
     <build>
