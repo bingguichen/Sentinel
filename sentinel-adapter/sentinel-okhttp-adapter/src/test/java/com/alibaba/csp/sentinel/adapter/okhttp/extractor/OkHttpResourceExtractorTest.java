@@ -34,16 +34,15 @@ public class OkHttpResourceExtractorTest {
             .url(url)
             .build();
         String resource = extractor.extract(request, null);
-        assertEquals("GET:" + url, resource);
+        assertEquals("GET:/okhttp/back", resource);
     }
-
     @Test
     public void testCustomizeOkHttpUrlCleaner() {
         OkHttpResourceExtractor extractor = new OkHttpResourceExtractor() {
             @Override
             public String extract(Request request, Connection connection) {
                 String regex = "/okhttp/back/";
-                String url = request.url().toString();
+                String url = request.url().uri().getPath();
                 if (url.contains(regex)) {
                     url = url.substring(0, url.indexOf(regex) + regex.length()) + "{id}";
                 }
@@ -54,6 +53,6 @@ public class OkHttpResourceExtractorTest {
         Request request = new Request.Builder()
             .url(url)
             .build();
-        assertEquals("GET:http://localhost:8083/okhttp/back/{id}", extractor.extract(request, null));
+        assertEquals("GET:/okhttp/back/{id}", extractor.extract(request, null));
     }
 }
