@@ -17,13 +17,18 @@ package com.alibaba.csp.sentinel.adapter.apache.httpasyncclient;
 
 import com.alibaba.csp.sentinel.*;
 import com.alibaba.csp.sentinel.adapter.apache.httpasyncclient.config.SentinelApacheHttpAsyncClientConfig;
+import com.alibaba.csp.sentinel.log.RecordLog;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.csp.sentinel.util.AssertUtil;
 import com.alibaba.csp.sentinel.util.StringUtil;
 import org.apache.hc.client5.http.async.AsyncExecCallback;
 import org.apache.hc.client5.http.async.AsyncExecChain;
 import org.apache.hc.client5.http.async.AsyncExecChainHandler;
+import org.apache.hc.core5.http.EntityDetails;
 import org.apache.hc.core5.http.HttpException;
 import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.nio.AsyncDataConsumer;
 import org.apache.hc.core5.http.nio.AsyncEntityProducer;
 
 import java.io.IOException;
@@ -40,29 +45,55 @@ public class SentinelApacheHttpAsyncClientInterceptor implements AsyncExecChainH
     }
 
     public SentinelApacheHttpAsyncClientInterceptor(SentinelApacheHttpAsyncClientConfig config){
+        AssertUtil.notNull(config, "config cannot be null");
         this.config = config;
     }
 
     @Override
     public void execute(HttpRequest request, AsyncEntityProducer asyncEntityProducer, AsyncExecChain.Scope scope, AsyncExecChain asyncExecChain, AsyncExecCallback asyncExecCallback) throws HttpException, IOException {
 
-        Entry entry = null;
+//        AsyncEntry asyncEntry =null;
         try {
             String name = config.getExtractor().extractor(request);
             if (!StringUtil.isEmpty(config.getPrefix())) {
                 name = config.getPrefix() + name;
             }
-            entry = SphU.entry(name, ResourceTypeConstants.COMMON_WEB, EntryType.OUT);
-            asyncExecChain.proceed(request, asyncEntityProducer, scope, asyncExecCallback);
+            AsyncEntry asyncEntry = SphU.asyncEntry(name, ResourceTypeConstants.COMMON_WEB, EntryType.OUT);
+            asyncExecChain.proceed(request, asyncEntityProducer, scope, new AsyncExecCallback() {
+
+                @Override
+                public AsyncDataConsumer handleResponse(HttpResponse response, EntityDetails entityDetails)
+                        throws HttpException, IOException {
+                    return asyncExecCallback.handleResponse(response, entityDetails);
+                }
+
+                @Override
+                public void handleInformationResponse(HttpResponse response) throws HttpException, IOException {
+                    asyncExecCallback.handleInformationResponse(response);
+                }
+
+                @Override
+                public void completed() {
+                    asyncExecCallback.completed();
+
+                    if (asyncEntry != null) {
+                        asyncEntry.exit();
+                    }
+                }
+
+                @Override
+                public void failed(Exception cause) {
+                    asyncExecCallback.failed(cause);
+
+                    if (asyncEntry != null) {
+                        asyncEntry.exit();
+                    }
+                }
+
+            });
+
         } catch (BlockException e) {
             config.getFallback().handle(request, e);
-//        }  catch (IOException ex) {
-//            Tracer.traceEntry(ex, entry);
-//            throw ex;
-        } finally {
-            if (entry != null) {
-                entry.exit();
-            }
         }
     }
 }
